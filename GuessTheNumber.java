@@ -29,10 +29,9 @@ public class GuessTheNumber {
 	public static void main(String[] args) {
 		
 		JFrame frame = new JFrame("Guess the number");
-		frame.setSize(600, 350);
+		frame.setSize(600, 400);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		
 		JPanel panel = new JPanel();
 		frame.add(panel);
@@ -42,14 +41,8 @@ public class GuessTheNumber {
 		panel.add(bestScoreLabel);
 		bestScoreLabel.setBounds(30, 45, 200, 15);
 		
-		JLabel newBestScore = new JLabel("");
-		panel.add(newBestScore);
-		newBestScore.setBounds(100, 130, 200, 15);
-		
-		
 		JLabel nameLabel = new JLabel("GUESS THE NUMBER");
 		panel.add(nameLabel);
-		//nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		nameLabel.setBounds(230, 10, 140, 15);
 		
 		JLabel levelLabel = new JLabel("");
@@ -59,15 +52,20 @@ public class GuessTheNumber {
 		JLabel rangeLabel = new JLabel("");
 		rangeLabel.setBounds(185, 30, 250, 15);
 		panel.add(rangeLabel);
-		
-		JLabel lastNumberLabel = new JLabel();
-		lastNumberLabel.setBounds(100, 70, 160, 15);
-		panel.add(lastNumberLabel);
-		
+
+		JLabel pointsLabel = new JLabel();
+		pointsLabel.setBounds(20, 140, 80, 15);
+		panel.add(pointsLabel);
+		pointsLabel.setVisible(false);
+
 		JLabel guessesLeftLabel = new JLabel();
 		guessesLeftLabel.setBounds(320, 70, 110, 15);
 		panel.add(guessesLeftLabel);
 		guessesLeftLabel.setVisible(false);
+		
+		JLabel lastNumberLabel = new JLabel();
+		lastNumberLabel.setBounds(100, 70, 160, 15);
+		panel.add(lastNumberLabel);
 		
 		JLabel compareLabel = new JLabel();
 		compareLabel.setBounds(100, 100, 300, 15);
@@ -78,10 +76,10 @@ public class GuessTheNumber {
 		panel.add(lostGame);
 		lostGame.setVisible(false);
 		
-		JLabel pointsLabel = new JLabel();
-		pointsLabel.setBounds(20, 140, 80, 15);
-		panel.add(pointsLabel);
-		pointsLabel.setVisible(false);
+		JLabel newBestScore = new JLabel("");
+		panel.add(newBestScore);
+		newBestScore.setBounds(100, 130, 200, 15);
+		
 		
 		JTextField usersGuess = new JTextField();
 		usersGuess.setBounds(160, 150, 50, 20);
@@ -89,13 +87,11 @@ public class GuessTheNumber {
 		usersGuess.setVisible(false);
 		
 		
-		
 		JButton guessButton = new JButton("Guess");
 		guessButton.setBounds(240, 150, 70, 20);
 		panel.add(guessButton);
 		guessButton.setVisible(false);
 		
-
 		JButton playButton = new JButton("Play");
 		playButton.setBounds(230, 180, 110, 20);
 		panel.add(playButton);
