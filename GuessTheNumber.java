@@ -102,6 +102,7 @@ public class GuessTheNumber {
 		giveUpButton.setVisible(false);
 		
 		
+		
 		guessButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -145,7 +146,7 @@ public class GuessTheNumber {
 					try {
 						Scanner myReader = new Scanner(myGame);
 						while(myReader.hasNextLine()) {
-							highestScore = myReader.nextInt();
+							highestScore = Integer.parseInt(myReader.nextLine());
 						}
 						myReader.close();
 					} catch (FileNotFoundException e1) {
@@ -228,7 +229,7 @@ public class GuessTheNumber {
 				try {
 					Scanner myReader = new Scanner(myGame);
 					while(myReader.hasNextLine()) {
-						highestScore = myReader.nextInt();
+						highestScore = Integer.parseInt(myReader.nextLine());
 					}
 					myReader.close();
 				} catch (FileNotFoundException e1) {
@@ -254,7 +255,7 @@ public class GuessTheNumber {
 				try {
 					Scanner myReader = new Scanner(myGame);
 					while(myReader.hasNextLine()) {
-						highestScore = myReader.nextInt();
+						highestScore = Integer.parseInt(myReader.nextLine());
 					}
 					myReader.close();
 				} catch (FileNotFoundException e1) {
