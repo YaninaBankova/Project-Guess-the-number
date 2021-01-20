@@ -1,5 +1,6 @@
 package edu.smg;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -25,8 +26,15 @@ public class GuessTheNumber {
 	static int guessesMade = 0;
 	static int points = 0;
 	static int highestScore = 0;
+	static Color greenToRed = new Color(0, 0, 0);
 	
 	public static void main(String[] args) {
+		
+		Color green = new Color(0, 255 ,0);
+		Color orange = new Color(255, 128 ,0);
+		Color blue = new Color(0, 102, 204);
+		//Color background = new Color(10, 10, 10);
+		Color lightBlue = new Color(204, 255, 255);
 		
 		JFrame frame = new JFrame("Guess the number");
 		frame.setSize(600, 400);
@@ -36,70 +44,86 @@ public class GuessTheNumber {
 		JPanel panel = new JPanel();
 		frame.add(panel);
 		panel.setLayout(null);
+		panel.setBackground(Color.BLACK);
 		
-		JLabel bestScoreLabel = new JLabel("");
+		JLabel bestScoreLabel = new JLabel();
 		panel.add(bestScoreLabel);
-		bestScoreLabel.setBounds(30, 45, 200, 15);
+		bestScoreLabel.setBounds(30, 40, 200, 15);
+		bestScoreLabel.setForeground(blue);
 		
 		JLabel nameLabel = new JLabel("GUESS THE NUMBER");
 		panel.add(nameLabel);
 		nameLabel.setBounds(230, 10, 140, 15);
+		nameLabel.setForeground(blue);
 		
-		JLabel levelLabel = new JLabel("");
-		levelLabel.setBounds(30, 30, 55, 15);
+		JLabel levelLabel = new JLabel();
+		levelLabel.setBounds(30, 60, 70, 15);
 		panel.add(levelLabel);
 		
-		JLabel rangeLabel = new JLabel("");
-		rangeLabel.setBounds(185, 30, 250, 15);
+		JLabel rangeLabel = new JLabel();
+		rangeLabel.setBounds(185, 60, 250, 15);
 		panel.add(rangeLabel);
+		rangeLabel.setForeground(orange);
 
 		JLabel pointsLabel = new JLabel();
-		pointsLabel.setBounds(20, 140, 80, 15);
+		pointsLabel.setBounds(30, 80, 100, 15);
 		panel.add(pointsLabel);
 		pointsLabel.setVisible(false);
+		pointsLabel.setForeground(blue);
 
 		JLabel guessesLeftLabel = new JLabel();
-		guessesLeftLabel.setBounds(320, 70, 110, 15);
+		guessesLeftLabel.setBounds(410, 80, 100, 15);
 		panel.add(guessesLeftLabel);
 		guessesLeftLabel.setVisible(false);
 		
 		JLabel lastNumberLabel = new JLabel();
-		lastNumberLabel.setBounds(100, 70, 160, 15);
+		lastNumberLabel.setBounds(160, 100, 160, 15);
 		panel.add(lastNumberLabel);
+		lastNumberLabel.setForeground(blue);
 		
 		JLabel compareLabel = new JLabel();
-		compareLabel.setBounds(100, 100, 300, 15);
+		compareLabel.setBounds(160, 120, 300, 15);
 		panel.add(compareLabel);
+		compareLabel.setForeground(blue);
 		
 		JLabel lostGame = new JLabel("Too many tries. you lose!");
-		lostGame.setBounds(100, 120, 200, 15);
+		lostGame.setBounds(160, 140, 200, 15);
 		panel.add(lostGame);
 		lostGame.setVisible(false);
+		lostGame.setForeground(blue);
 		
 		JLabel newBestScore = new JLabel("");
 		panel.add(newBestScore);
-		newBestScore.setBounds(100, 130, 200, 15);
+		newBestScore.setBounds(160, 160, 200, 15);
+		newBestScore.setForeground(blue);
 		
 		
 		JTextField usersGuess = new JTextField();
-		usersGuess.setBounds(160, 150, 50, 20);
+		usersGuess.setBounds(213, 190, 60, 20);
 		panel.add(usersGuess);
 		usersGuess.setVisible(false);
+		usersGuess.setBackground(lightBlue);
 		
 		
 		JButton guessButton = new JButton("Guess");
-		guessButton.setBounds(240, 150, 70, 20);
+		guessButton.setBounds(295, 190, 70, 20);
 		panel.add(guessButton);
 		guessButton.setVisible(false);
+		guessButton.setBackground(blue);
+		guessButton.setForeground(Color.BLACK);
 		
 		JButton playButton = new JButton("Play");
-		playButton.setBounds(230, 180, 110, 20);
+		playButton.setBounds(240, 190, 110, 20);
 		panel.add(playButton);
+		playButton.setBackground(blue);
+		playButton.setForeground(Color.BLACK);
 		
 		JButton giveUpButton = new JButton("Give up");
-		giveUpButton.setBounds(230, 201, 119, 20);
+		giveUpButton.setBounds(250, 230, 80, 20);
 		panel.add(giveUpButton);
 		giveUpButton.setVisible(false);
+		giveUpButton.setBackground(blue);
+		giveUpButton.setForeground(Color.BLACK);
 		
 		
 		
@@ -111,6 +135,7 @@ public class GuessTheNumber {
 					guessedNumber = Integer.parseInt(usersGuess.getText());
 				} catch(NumberFormatException exception){
 					JOptionPane.showMessageDialog(null, "Invalid input. Try again!", "Error", 0);
+					
 					usersGuess.setText(null);
 					return;
 				}
@@ -118,6 +143,15 @@ public class GuessTheNumber {
 				usersGuess.setText(null);
 				guessesMade++;
 				guessesLeftLabel.setText("Guesses left: " + (maxGuesses - guessesMade));
+				
+				if(guessesMade <= maxGuesses / 2) {
+					greenToRed = new Color(510 * guessesMade / maxGuesses, 255, 0);
+				} else {
+					greenToRed = new Color(255, 510 * (maxGuesses - guessesMade) / maxGuesses, 0);
+				}
+				
+				guessesLeftLabel.setForeground(greenToRed);
+				
 				guessesLeftLabel.setVisible(true);
 				lastGuess = guessedNumber;
 				lastNumberLabel.setText("Guessed number:  " + lastGuess);
@@ -130,7 +164,18 @@ public class GuessTheNumber {
 				} else {
 					compareLabel.setText("You guessed it!");
 					level++;
-					points = (int)(upperLimit / guessesMade);
+					
+					if(level <=  15) {
+						greenToRed = new Color(17 * level, 255, 0);
+					} else if (level < 30){
+						greenToRed = new Color(255, 17 * (30 - level), 0);
+					} else {
+						greenToRed = new Color(255, 0, 0);
+					}
+					levelLabel.setForeground(greenToRed);
+					
+					
+					points += (int)(upperLimit / guessesMade);
 					pointsLabel.setText("Points: " + points);
 					guessButton.setVisible(false);
 					giveUpButton.setVisible(false);
@@ -146,7 +191,11 @@ public class GuessTheNumber {
 					try {
 						Scanner myReader = new Scanner(myGame);
 						while(myReader.hasNextLine()) {
-							highestScore = Integer.parseInt(myReader.nextLine());
+							try {
+								highestScore = Integer.parseInt(myReader.nextLine());
+							} catch (NumberFormatException e4) {
+								highestScore = 0;
+							}
 						}
 						myReader.close();
 					} catch (FileNotFoundException e1) {
@@ -155,7 +204,7 @@ public class GuessTheNumber {
 						} catch (IOException e2) {
 							e2.printStackTrace();
 						}
-					}
+					} 
 					
 					if(highestScore <= points) {
 						newBestScore.setText("Congrats! That's a new record!");
@@ -207,7 +256,14 @@ public class GuessTheNumber {
 						maxGuesses = 2;
 					}
 				}
+				
+				if(level == 1) {
+					levelLabel.setForeground(green);
+				}
+				
+				
 				guessesMade = 0;
+				guessesLeftLabel.setForeground(green);
 				pointsLabel.setText("Points: " + points);
 				levelLabel.setText("Level: " + level);
 				rangeLabel.setText("Enter a number between 0 and " + upperLimit);
@@ -229,7 +285,11 @@ public class GuessTheNumber {
 				try {
 					Scanner myReader = new Scanner(myGame);
 					while(myReader.hasNextLine()) {
-						highestScore = Integer.parseInt(myReader.nextLine());
+						try {
+							highestScore = Integer.parseInt(myReader.nextLine());
+						} catch (NumberFormatException e4) {
+							highestScore = 0;
+						}
 					}
 					myReader.close();
 				} catch (FileNotFoundException e1) {
@@ -238,7 +298,7 @@ public class GuessTheNumber {
 					} catch (IOException e2) {
 						e2.printStackTrace();
 					}
-				}
+				} 
 				bestScoreLabel.setText("Highest score: " + highestScore);
 			}
 		});
@@ -255,7 +315,11 @@ public class GuessTheNumber {
 				try {
 					Scanner myReader = new Scanner(myGame);
 					while(myReader.hasNextLine()) {
-						highestScore = Integer.parseInt(myReader.nextLine());
+						try {
+							highestScore = Integer.parseInt(myReader.nextLine());
+						} catch (NumberFormatException e4) {
+							highestScore = 0;
+						}
 					}
 					myReader.close();
 				} catch (FileNotFoundException e1) {
