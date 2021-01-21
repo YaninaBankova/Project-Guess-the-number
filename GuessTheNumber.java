@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 
 public class GuessTheNumber {
 	
@@ -132,6 +134,10 @@ public class GuessTheNumber {
 				
 				int guessedNumber;
 				//if the guess isn't integer a message dialog pops up
+				 UIManager.put("OptionPane.background",new ColorUIResource(0,0,0));
+				 UIManager.put("Panel.background",new ColorUIResource(0,0,0));
+				 UIManager.put("OptionPane.messageForeground",blue);
+				 UIManager.put("Button.background", blue);
 				try {
 					guessedNumber = Integer.parseInt(usersGuess.getText());
 				} catch(NumberFormatException exception){
