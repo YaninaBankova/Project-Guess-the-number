@@ -33,13 +33,13 @@ public class GuessTheNumber {
 		Color green = new Color(0, 255 ,0);
 		Color orange = new Color(255, 128 ,0);
 		Color blue = new Color(0, 102, 204);
-		//Color background = new Color(10, 10, 10);
 		Color lightBlue = new Color(204, 255, 255);
 		
 		JFrame frame = new JFrame("Guess the number");
 		frame.setSize(600, 400);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 		
 		JPanel panel = new JPanel();
 		frame.add(panel);
@@ -113,7 +113,7 @@ public class GuessTheNumber {
 		guessButton.setForeground(Color.BLACK);
 		
 		JButton playButton = new JButton("Play");
-		playButton.setBounds(240, 190, 110, 20);
+		playButton.setBounds(235, 190, 110, 20);
 		panel.add(playButton);
 		playButton.setBackground(blue);
 		playButton.setForeground(Color.BLACK);
@@ -131,7 +131,8 @@ public class GuessTheNumber {
 			public void actionPerformed(ActionEvent e) {
 				
 				int guessedNumber;
-				try{
+				//if the guess isn't integer a message dialog pops up
+				try {
 					guessedNumber = Integer.parseInt(usersGuess.getText());
 				} catch(NumberFormatException exception){
 					JOptionPane.showMessageDialog(null, "Invalid input. Try again!", "Error", 0);
@@ -144,6 +145,7 @@ public class GuessTheNumber {
 				guessesMade++;
 				guessesLeftLabel.setText("Guesses left: " + (maxGuesses - guessesMade));
 				
+				//formula for the color going gradually from green to red for guessesLeftLabel
 				if(guessesMade <= maxGuesses / 2) {
 					greenToRed = new Color(510 * guessesMade / maxGuesses, 255, 0);
 				} else {
@@ -157,6 +159,7 @@ public class GuessTheNumber {
 				lastNumberLabel.setText("Guessed number:  " + lastGuess);
 				compareLabel.setVisible(true);
 				lastNumberLabel.setVisible(true);
+				//compare the random number and the user's guess
 				if(guessedNumber > randomNumber) {
 					compareLabel.setText("The actual number is lower");
 				} else if(guessedNumber < randomNumber) {
@@ -164,7 +167,7 @@ public class GuessTheNumber {
 				} else {
 					compareLabel.setText("You guessed it!");
 					level++;
-					
+					//formula for the color going gradually from green to red for levelLabel
 					if(level <=  15) {
 						greenToRed = new Color(17 * level, 255, 0);
 					} else if (level < 30){
@@ -174,7 +177,6 @@ public class GuessTheNumber {
 					}
 					levelLabel.setForeground(greenToRed);
 					
-					
 					points += (int)(upperLimit / guessesMade);
 					pointsLabel.setText("Points: " + points);
 					guessButton.setVisible(false);
@@ -182,43 +184,16 @@ public class GuessTheNumber {
 					usersGuess.setVisible(false);
 					playButton.setText("Next level");
 					playButton.setVisible(true);
-					
 				}
+				//if the player lost
 				if(guessesMade == maxGuesses && guessedNumber != randomNumber) {
-					
-					
-					File myGame = new File("guessinggame.txt");
-					try {
-						Scanner myReader = new Scanner(myGame);
-						while(myReader.hasNextLine()) {
-							try {
-								highestScore = Integer.parseInt(myReader.nextLine());
-							} catch (NumberFormatException e4) {
-								highestScore = 0;
-							}
-						}
-						myReader.close();
-					} catch (FileNotFoundException e1) {
-						try {
-							myGame.createNewFile();
-						} catch (IOException e2) {
-							e2.printStackTrace();
-						}
-					} 
-					
+					bestScoreNow();
+					//checks if the score is a new best score
 					if(highestScore <= points) {
 						newBestScore.setText("Congrats! That's a new record!");
 						newBestScore.setVisible(true);
-						try {
-							FileWriter myWriter = new FileWriter("guessinggame.txt", true);
-							myWriter.write(points + "\n");
-							myWriter.close();
-						} catch (IOException e3) {
-							System.out.println("An error occurred.");
-							e3.printStackTrace();
-						}
+						saveNewScore();
 					}
-					
 					
 					points = 0;
 					level = 1;
@@ -236,6 +211,7 @@ public class GuessTheNumber {
 		
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//depending on the level the player has to guess a number b/w 0 and upperLimit
 				switch(level) {
 					case 1: upperLimit = 10; break;
 					case 2: upperLimit = 50; break;
@@ -250,6 +226,7 @@ public class GuessTheNumber {
 				}
 				randomNumber = (int)(Math.random() * upperLimit);
 				maxGuesses = (int)(Math.log(upperLimit) / Math.log(2)) + 1;
+				//after level 11 the guesses become one less than the needed every 10 levels
 				if(level > 11) {
 					maxGuesses -= (int)(level / 10);
 					if (maxGuesses < 3) {
@@ -260,7 +237,6 @@ public class GuessTheNumber {
 				if(level == 1) {
 					levelLabel.setForeground(green);
 				}
-				
 				
 				guessesMade = 0;
 				guessesLeftLabel.setForeground(green);
@@ -280,25 +256,7 @@ public class GuessTheNumber {
 				giveUpButton.setVisible(true);
 				pointsLabel.setVisible(true);
 				
-				
-				File myGame = new File("guessinggame.txt");
-				try {
-					Scanner myReader = new Scanner(myGame);
-					while(myReader.hasNextLine()) {
-						try {
-							highestScore = Integer.parseInt(myReader.nextLine());
-						} catch (NumberFormatException e4) {
-							highestScore = 0;
-						}
-					}
-					myReader.close();
-				} catch (FileNotFoundException e1) {
-					try {
-						myGame.createNewFile();
-					} catch (IOException e2) {
-						e2.printStackTrace();
-					}
-				} 
+				bestScoreNow();
 				bestScoreLabel.setText("Highest score: " + highestScore);
 			}
 		});
@@ -311,36 +269,12 @@ public class GuessTheNumber {
 				playButton.setVisible(true);
 				giveUpButton.setVisible(false);
 				
-				File myGame = new File("guessinggame.txt");
-				try {
-					Scanner myReader = new Scanner(myGame);
-					while(myReader.hasNextLine()) {
-						try {
-							highestScore = Integer.parseInt(myReader.nextLine());
-						} catch (NumberFormatException e4) {
-							highestScore = 0;
-						}
-					}
-					myReader.close();
-				} catch (FileNotFoundException e1) {
-					try {
-						myGame.createNewFile();
-					} catch (IOException e2) {
-						e2.printStackTrace();
-					}
-				}
-				
+				bestScoreNow();
+				//checks if the score is a new best score
 				if(highestScore <= points) {
 					newBestScore.setText("Congrats! That's a new record!");
 					newBestScore.setVisible(true);
-					try {
-						FileWriter myWriter = new FileWriter("guessinggame.txt", true);
-						myWriter.write(points + "\n");
-						myWriter.close();
-					} catch (IOException e3) {
-						System.out.println("An error occurred.");
-						e3.printStackTrace();
-					}
+					saveNewScore();
 				}
 				
 				points = 0;
@@ -348,8 +282,38 @@ public class GuessTheNumber {
 			}
 		});
 		
+	}
+	
+	public static void bestScoreNow() {
+		File myGame = new File("guessinggame.txt");
+		try {
+			Scanner myReader = new Scanner(myGame);
+			while(myReader.hasNextLine()) {
+				try {
+					highestScore = Integer.parseInt(myReader.nextLine());
+				} catch (NumberFormatException e4) {
+					
+				}
+			}
+			myReader.close();
+		} catch (FileNotFoundException e1) {
+			try {
+				myGame.createNewFile();
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+		}
+	}
+	
+	public static void saveNewScore() {
+		try {
+			FileWriter myWriter = new FileWriter("guessinggame.txt", true);
+			myWriter.write(points + "\n");
+			myWriter.close();
+		} catch (IOException e3) {
+			System.out.println("An error occurred.");
+			e3.printStackTrace();
+		}
 		
-		frame.setVisible(true);
-
 	}
 }
